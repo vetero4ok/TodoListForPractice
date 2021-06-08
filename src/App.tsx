@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import './App.css';
 import {TodoList} from './TodoList';
 import {v1} from 'uuid';
+import {AddItemForm} from './AddItemForm';
+import {EditableSpan} from './EditableSpan';
 
 export type TaskType = {
     id: string
@@ -44,8 +46,21 @@ function App() {
             {id: v1(), title: 'Vodka', isDone: false},
         ]
     })
+
+    function addTodoList(title: string) {
+        const newTodoListID = v1();
+        const newTodolist: TodoListType = {
+            id: newTodoListID,
+            title,
+            filter: 'All'
+        }
+        setTodoList([...todoList, newTodolist])
+        setTasks({...tasks, [newTodoListID]: []})
+
+    }
+
     function removeTodoList(todoListID: string) {
-        setTodoList(todoList.filter(tl=>tl.id!==todoListID))
+        setTodoList(todoList.filter(tl => tl.id !== todoListID))
         const copyTask = {...tasks}
         delete copyTask[todoListID]
         setTasks(copyTask)
@@ -59,31 +74,40 @@ function App() {
     }
 
     function changeTodoListFilter(filter: FilterValueType, todoListID: string) {
-
         setTodoList(todoList.map(tl => tl.id === todoListID ? {...tl, filter} : tl))
-
     }
 
-    function addTask(title: string,todoListID: string ) {
+    function changeTodoListTitle(title: string, todoListID: string) {
+        setTodoList(todoList.map(tl => tl.id === todoListID ? {...tl, title} : tl))
+    }
+
+    function addTask(title: string, todoListID: string) {
         const newTask: TaskType = {
             id: v1(),
             title,
             isDone: false
         }
         const copyTask = {...tasks}
-        copyTask[todoListID]= [newTask,...tasks[todoListID]]
+        copyTask[todoListID] = [newTask, ...tasks[todoListID]]
         setTasks(copyTask)
     }
 
-    function changeTaskStatus(taskID: string, isDone: boolean, todoListID: string ) {
+    function changeTaskStatus(taskID: string, isDone: boolean, todoListID: string) {
         const copyTask = {...tasks}
         copyTask[todoListID] = tasks[todoListID].map(t => t.id === taskID ? {...t, isDone} : t)
         setTasks(copyTask)
 
     }
 
+    function changeTaskTitle(taskID: string, title: string, todoListID: string) {
+        const copyTask = {...tasks}
+        copyTask[todoListID] = tasks[todoListID].map(t => t.id === taskID ? {...t, title} : t)
+        setTasks(copyTask)
 
-    function getTodoListFilter(tl:TodoListType) {
+    }
+
+
+    function getTodoListFilter(tl: TodoListType) {
         switch (tl.filter) {
             case 'Active':
                 return tasks[tl.id].filter(t => !t.isDone)
@@ -95,27 +119,32 @@ function App() {
         }
 
     }
-const todoListComponents = todoList.map(tl=>{
-    const taskForTodolist = getTodoListFilter(tl)
-    return(
-        <TodoList
-            key={tl.id}
-            todoListID={tl.id}
-            title={tl.title}
-            filter={tl.filter}
-            tasks={taskForTodolist}
-            addTask={addTask}
-            removeTask={removeTask}
-            changeTodoListFilter={changeTodoListFilter}
-            changeTaskStatus={changeTaskStatus}
-            removeTodoList={removeTodoList}
 
-        />
-    );
-})
+    const todoListComponents = todoList.map(tl => {
+        const taskForTodolist = getTodoListFilter(tl)
+        return (
+            <TodoList
+                key={tl.id}
+                todoListID={tl.id}
+                title={tl.title}
+                filter={tl.filter}
+                tasks={taskForTodolist}
+                addTask={addTask}
+                removeTask={removeTask}
+                changeTodoListFilter={changeTodoListFilter}
+                changeTaskStatus={changeTaskStatus}
+                removeTodoList={removeTodoList}
+                changeTaskTitle={changeTaskTitle}
+                changeTodoListTitle={changeTodoListTitle}
+
+            />
+        );
+    })
 
     return (
         <div className="App">
+            <AddItemForm addItem={addTodoList}/>
+
             {todoListComponents}
         </div>
     );
