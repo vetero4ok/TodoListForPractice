@@ -3,12 +3,15 @@ import {FilterValueType, TaskType} from './App';
 
 type PropsTodoListType = {
     title: string
+    todoListID: string
     filter: FilterValueType
     tasks: Array<TaskType>
-    addTask: (title: string) => void
-    removeTask: (taskID: string) => void
-    changeTodoListFilter: (filter: FilterValueType) => void
-    changeTaskStatus: (taskID: string, isDone: boolean) => void
+    addTask: (title: string, todoListID: string) => void
+    removeTask: (taskID: string, todoListID: string) => void
+    changeTodoListFilter: (filter: FilterValueType, todoListID: string) => void
+    changeTaskStatus: (taskID: string, isDone: boolean, todoListID: string) => void
+
+    removeTodoList: (todoListID: string) => void
 
 }
 
@@ -17,9 +20,9 @@ export const TodoList = (props: PropsTodoListType) => {
     const [title, setTitle] = useState<string>('')
     const [error, setError] = useState<boolean>(false)
     const taskJSXElement = props.tasks.map(t => {
-        const removeTask = () => props.removeTask(t.id)
+        const removeTask = () => props.removeTask(t.id, props.todoListID)
         const changeTaskStatus = (e: ChangeEvent<HTMLInputElement>) =>
-            props.changeTaskStatus(t.id, e.currentTarget.checked)
+            props.changeTaskStatus(t.id, e.currentTarget.checked, props.todoListID)
         const tasksIsDoneCheckbox = t.isDone ? 'isDone' : ''
 
         return (
@@ -37,7 +40,7 @@ export const TodoList = (props: PropsTodoListType) => {
     const onChangeAddTask = () => {
         const validation = title.trim()
         if (validation) {
-            props.addTask(validation)
+            props.addTask(validation, props.todoListID)
         } else {
             setError(true)
         }
@@ -52,14 +55,18 @@ export const TodoList = (props: PropsTodoListType) => {
             onChangeAddTask()
         }
     }
+    const deleteTodoList = () => props.removeTodoList(props.todoListID)
 
-    const onClickSetAllFilter = () => props.changeTodoListFilter('All')
-    const onClickSetActiveFilter = () => props.changeTodoListFilter('Active')
-    const onClickSetCompletedFilter = () => props.changeTodoListFilter('Completed')
+    const onClickSetAllFilter = () => props.changeTodoListFilter('All', props.todoListID)
+    const onClickSetActiveFilter = () => props.changeTodoListFilter('Active', props.todoListID)
+    const onClickSetCompletedFilter = () => props.changeTodoListFilter('Completed', props.todoListID)
 
     return (
         <div>
-            <h3>{props.title}</h3>
+            <h3>
+                {props.title}
+                <button onClick={deleteTodoList}>x</button>
+            </h3>
             <div>
                 {error && <div style={{color: 'red'}}>Title is required!</div>}
                 <input
