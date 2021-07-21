@@ -1,7 +1,10 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import React, {ChangeEvent,} from 'react';
 import {FilterValueType, TaskType} from './App';
 import {AddItemForm} from './AddItemForm';
 import {EditableSpan} from './EditableSpan';
+import Button from '@material-ui/core/Button';
+import {Checkbox, IconButton} from '@material-ui/core';
+import {Delete} from '@material-ui/icons';
 
 type PropsTodoListType = {
     title: string
@@ -33,15 +36,19 @@ export const TodoList = (props: PropsTodoListType) => {
         const tasksIsDoneCheckbox = t.isDone ? 'isDone' : ''
 
         return (
-            <li key={t.id} className={tasksIsDoneCheckbox}>
-                <input
-                    type="checkbox"
-                    checked={t.isDone}
-                    onChange={changeTaskStatus}
-                />
-
-                <EditableSpan title={t.title} changeTitle={changeTaskTitle}/>
-                <button onClick={removeTask}>x</button>
+            <li key={t.id}>
+                <span className={tasksIsDoneCheckbox}>
+                    <Checkbox
+                        size={'small'}
+                        color={'primary'}
+                        checked={t.isDone}
+                        onChange={changeTaskStatus}
+                    />
+                    <EditableSpan title={t.title} changeTitle={changeTaskTitle}/>
+                </span>
+                <IconButton onClick={removeTask} size={'small'}>
+                    <Delete/>
+                </IconButton>
             </li>
         );
     })
@@ -56,7 +63,9 @@ export const TodoList = (props: PropsTodoListType) => {
         <div>
             <h3>
                 <EditableSpan title={props.title} changeTitle={changeTodoListTitle}/>
-                <button onClick={deleteTodoList}>x</button>
+                <IconButton onClick={deleteTodoList} size={'small'}>
+                    <Delete/>
+                </IconButton>
             </h3>
             <AddItemForm
                 addItem={addTask}
@@ -66,18 +75,24 @@ export const TodoList = (props: PropsTodoListType) => {
                 {taskJSXElement}
             </ul>
             <div>
-                <button
-                    className={props.filter === 'All' ? 'activeFilter' : ''}
+                <Button
+                    size={'small'}
+                    variant={props.filter === 'All' ? 'contained' : 'outlined'}
+                    color={'primary'}
                     onClick={onClickSetAllFilter}>All
-                </button>
-                <button
-                    className={props.filter === 'Active' ? 'activeFilter' : ''}
+                </Button>
+                <Button
+                    variant={props.filter === 'Active' ? 'contained' : 'outlined'}
+                    size={'small'}
+                    color={'primary'}
                     onClick={onClickSetActiveFilter}>Active
-                </button>
-                <button
-                    className={props.filter === 'Completed' ? 'activeFilter' : ''}
+                </Button>
+                <Button
+                    variant={props.filter === 'Completed' ? 'contained' : 'outlined'}
+                    size={'small'}
+                    color={'primary'}
                     onClick={onClickSetCompletedFilter}>Completed
-                </button>
+                </Button>
             </div>
         </div>
     );
