@@ -1,19 +1,19 @@
-.App {
-  padding: 30px;
-  display: flex;
-}
+/*.App {*/
+/*  padding: 30px;*/
+/*  display: flex;*/
+/*}*/
 
-.App > div {
-  margin-right: 50px;
-}
+/*.App > div {*/
+/*  margin-right: 50px;*/
+/*}*/
 
 .isDone {
   opacity: 0.5;
 }
-.activeFilter {
-  background-color: #a8a8a8;
-}
-.error {
-  border: 2px solid red;
-  outline: none;
-}
+/*.activeFilter {*/
+/*  background-color: #a8a8a8;*/
+/*}*/
+/*.error {*/
+/*  border: 2px solid red;*/
+/*  outline: none;*/
+/*}*/
