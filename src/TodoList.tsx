@@ -23,6 +23,7 @@ type PropsTodoListType = {
 
 export const TodoList = React.memo((props: PropsTodoListType) => {
     //console.log('TodoList')
+
     let taskForTodolist = props.tasks
     if (props.filter === 'Active') {
         taskForTodolist = taskForTodolist.filter(t => !t.isDone)
@@ -36,21 +37,12 @@ export const TodoList = React.memo((props: PropsTodoListType) => {
     const changeTodoListTitle = useCallback((title: string) =>
         props.changeTodoListTitle(title, props.todoListID), [props.todoListID, props.changeTodoListTitle])
 
-
-    const removeTaskHandler = useCallback((taskID: string) =>
-        props.removeTask(taskID, props.todoListID), [props.removeTask, props.todoListID])
-    const changeTaskTitleHandler = useCallback((taskID: string, title: string) =>
-        props.changeTaskTitle(taskID, title, props.todoListID), [props.changeTaskTitle, props.todoListID])
-    const changeTaskStatusHandler = useCallback((taskID: string, isDone: boolean) =>
-        props.changeTaskStatus(taskID, isDone, props.todoListID), [props.changeTaskStatus, props.todoListID])
     const taskJSXElement = taskForTodolist.map(t => {
         return (
             <Task
                 key={t.id}
+                todoListID={props.todoListID}
                 task={t}
-                removeTask={removeTaskHandler}
-                changeTaskTitle={changeTaskTitleHandler}
-                changeTaskStatus={changeTaskStatusHandler}
             />
         );
     })
