@@ -29,15 +29,14 @@ export const TodoList = React.memo((props: TodoListPropsType) => {
     if (todoList.filter === 'Completed') {
         taskForTodolist = taskForTodolist.filter(t => t.isDone)
     }
-
     const addTask = (title: string) => dispatch(addTaskAC(title, props.todoListID))
 
     const taskJSXElement = taskForTodolist.map(t => {
         return (
             <Task
                 key={t.id}
+                taskID = {t.id}
                 todoListID={props.todoListID}
-                task={t}
             />
         );
     })
