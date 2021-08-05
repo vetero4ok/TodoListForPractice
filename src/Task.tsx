@@ -2,9 +2,9 @@ import React, {ChangeEvent} from 'react';
 import {Checkbox, IconButton} from '@material-ui/core';
 import {EditableSpan} from './EditableSpan';
 import {Delete} from '@material-ui/icons';
-import {TaskType} from './App';
 import {useDispatch} from 'react-redux';
 import {changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from './State/tasks-reducer';
+import {TaskType} from './AppWithRedux';
 
 type TaskPropsType = {
     todoListID: string
